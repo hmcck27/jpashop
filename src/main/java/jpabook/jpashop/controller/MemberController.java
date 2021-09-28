@@ -35,7 +35,6 @@ public class MemberController {
         System.out.println(form.toString());
 
         if(result.hasErrors()){
-
             return "members/createMemberForm";
         }
 
