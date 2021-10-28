@@ -1,16 +1,19 @@
 package jpabook.jpashop.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jpabook.jpashop.domain.item.Item;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.mapping.ToOne;
 
 import javax.persistence.*;
 
 import static javax.persistence.FetchType.*;
 
+@BatchSize(size = 1000)
 @Entity
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -28,6 +31,7 @@ public class OrderItem {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "order_id")
+    @JsonIgnore
     private Order order;
 
     private int orderPrice;
@@ -35,10 +39,12 @@ public class OrderItem {
 
     //==생성 메소드==//
     public static OrderItem createOrderItem(Item item, int orderPrice, int count) {
+
         /**
          * 가격을 item으로 안하는 이유는 쿠폰이나 다른 것들이 적용되면 단순한 item의 가격대로 가지 않기 때문이다.
          * 따라서 orderPrice를 따로 가져간다.
          */
+
         OrderItem orderItem = new OrderItem();
         orderItem.setItem(item);
         orderItem.setOrderPrice(orderPrice);
